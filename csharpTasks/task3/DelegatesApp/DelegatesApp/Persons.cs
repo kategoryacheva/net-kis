@@ -20,19 +20,33 @@ namespace DelegatesApp
     {
         public Person[] People { get; set; }
         
-        public Person GetOne()
+        public Person GetOne(Func<Person, bool> func)
         {
-            throw new NotImplementedException();
+            foreach(Person p in People)
+            {
+                if (func(p))
+                    return p;
+            }
+            return null;
         }
 
-        public IEnumerable<Person> GetAll()
+        public IEnumerable<Person> GetAll(Func<Person, bool> func)
         {
-            throw new NotImplementedException();
+            foreach(Person p in People)
+            {
+                if (func(p))
+                    yield return p;
+            }
         }
 
-        public bool Contains()
+        public bool Contains(Func<Person, bool> func)
         {
-            throw new NotImplementedException();
+            foreach(Person p in People)
+            {
+                if (func(p))
+                    return true;
+            }
+            return false;
         }
     }
 }
