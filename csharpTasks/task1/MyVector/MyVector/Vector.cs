@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,85 +22,82 @@ namespace MyVector
         /// </summary>
         private void Foo()
         {
-
         }        
         */
 
-        public double X { get; private set; }
-        public double Y { get; private set; }
-        
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        public Vector(double X, double Y)
-        {
-            this.X = X;
-            this.Y = Y;
-        }
 
-        public static Vector ZeroVector()
+        public double X { get; set; }
+        public double Y { get; set; }
+
+        /// <summary>
+        /// Vector class constructor
+        /// </summary>
+        /// <param name="x">x coordinate of the vector</param>
+        /// <param name="y">y coordinate of the vector</param>
+        public Vector(double x = 0, double y = 0)
         {
-            return new Vector { X = 0, Y = 0 };
+            X = x;
+            Y = y;
         }
 
         /// <summary>
-        /// Длина вектора
+        /// Returns the length of the vector
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Length count: sqrt(x*x + y*y)</returns>
         public double Length()
         {
-            return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            return Math.Sqrt(X*X + Y*Y);
         }
 
         /// <summary>
-        /// Сложение векторов.
+        /// Adds a vector to this vector
         /// </summary>
-        /// <param name="v">Второе слагаемое</param>
-        /// <returns>Вектор-сумма</returns>
+        /// <param name="v"></param>
+        /// <returns>This vector</returns>
         public Vector Add(Vector v)
         {
-            return new Vector(X + v.X, Y + v.Y);
+            X += v.X;
+            Y += v.Y;
+
+            return this;
         }
 
         /// <summary>
-        /// Домножение вектора на скаляр
+        /// Multiplies this vector with a number
         /// </summary>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// <param name="k">Double coeff</param>
+        /// <returns>This vector</returns>
         public Vector Scale(double k)
         {
-            return new Vector(X * k, Y * k);
+            X *= k;
+            Y *= k;
+
+            return this;
         }
 
         /// <summary>
-        /// Скалярное произведение
+        /// Counts dot product of this vector and another vector
         /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
+        /// <param name="v">Another vector</param>
+        /// <returns>Dot product in double</returns>
         public double DotProduct(Vector v)
         {
-            return v.X * this.X + v.Y * this.Y;
+            return X * v.X + Y * v.Y;
         }
 
         /// <summary>
-        /// Векторное произведение
+        /// Counts cross product of this vector and another vector
         /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
+        /// <param name="v">Another vector</param>
+        /// <returns>Cross product in double</returns>
         public double CrossProduct(Vector v)
         {
-            return Math.Abs(this.X * v.Y - this.Y * v.X);
+            return X * v.Y - Y * v.X;
         }
 
-        /// <summary>
-        /// Приведение к строке
-        /// </summary>
-        /// <returns></returns>
         override public string ToString()
         {
-            return $"({this.X}, {this.Y})";
+            return $"Vector: x = {X}, y = {Y}";
         }
 
         #region Operators        
@@ -110,89 +107,41 @@ namespace MyVector
         - +v, -v 
         */
         // Такая семантика у операторов в C#
-
-        /// <summary>
-        /// Оператор сложения векторов
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="u"></param>
-        /// <returns></returns>
-        public static Vector operator+ (Vector v, Vector u)
+        public static Vector operator +(Vector v, Vector u)
         {
             return new Vector(v.X + u.X, v.Y + u.Y);
-        } 
-        
-        /// <summary>
-        /// Оператор разности векторов
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="u"></param>
-        /// <returns></returns>
-        public static Vector operator- (Vector v, Vector u)
-        {
-            return new Vector(v.X - u.X, v.Y - u.Y);
-        } 
-        
-        /// <summary>
-        /// Оператор умножения вектора на скаляр
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        public static Vector operator* (Vector v, double k)
-        {
-            double result_X = v.X * k;
-            double result_Y = v.Y * k;
-            return new Vector(result_X, result_Y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="k"></param>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public static Vector operator* (double k, Vector v)
+        public static Vector operator -(Vector v, Vector u)
+        {
+            return new Vector(v.X - u.X, v.Y - u.Y);
+        }
+
+        public static Vector operator *(Vector v, double k)
         {
             return new Vector(v.X * k, v.Y * k);
         }
 
-        /// <summary>
-        /// Деление на скаляр
-        /// </summary>
-        /// <param name="v"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        public static Vector operator/ (Vector v, double k)
+        public static Vector operator *(double k, Vector v)
         {
-            if (k == 0)
-            {
-                throw new DivideByZeroException();
-            }
+            return new Vector(v.X * k, v.Y * k);
+        }
+
+        public static Vector operator /(Vector v, double k)
+        {
             return new Vector(v.X / k, v.Y / k);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public static Vector operator+ (Vector v)
+        public static Vector operator +(Vector v)
         {
-            return v;
+            return new Vector(+v.X, +v.Y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public static Vector operator- (Vector v)
+        public static Vector operator -(Vector v)
         {
             return new Vector(-v.X, -v.Y);
-
         }
+
         #endregion
     }
 }
-
